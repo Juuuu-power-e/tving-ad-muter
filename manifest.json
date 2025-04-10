@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Tving Ad Muter",
+  "version": "1.0",
+  "description": "티빙 광고 감지시 자동 음소거, 종료 시 복원",
+  "permissions": [
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://*.tving.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.tving.com/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+  "action": {
+    "default_title": "Tving 광고 음소거"
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}
