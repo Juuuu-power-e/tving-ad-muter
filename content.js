@@ -1,5 +1,4 @@
 let isMuted = false;
-let muteInterval = null;
 
 function isAdVisible() {
   const el = [...document.querySelectorAll('span')]
@@ -10,65 +9,21 @@ function isAdVisible() {
   return style.display !== 'none' && style.visibility !== 'hidden' && el.offsetParent !== null;
 }
 
-function muteAllVideos() {
-  const videos = document.querySelectorAll('video');
-  videos.forEach(video => {
-    if (!video.muted || video.volume > 0) {
-      video.muted = true;
-      video.volume = 0;
-      console.log('🔇 비디오 강제 음소거', video);
-    }
-  });
-}
-
-function unmuteAllVideos() {
-  const videos = document.querySelectorAll('video');
-  videos.forEach(video => {
-    video.muted = false;
-    video.volume = 1;
-    console.log('🔊 비디오 음소거 해제', video);
-  });
-}
-
-function startForceMute() {
-  if (muteInterval) return;
-
-  muteInterval = setInterval(() => {
-    muteAllVideos(); // 반복적으로 mute 강제 적용
-  }, 500);
-}
-
-function stopForceMute() {
-  if (muteInterval) {
-    clearInterval(muteInterval);
-    muteInterval = null;
-  }
-}
-
-function handleAdMute() {
+function handleAdCheck() {
   chrome.storage.sync.get(['muteEnabled'], (res) => {
     if (!res.muteEnabled) return;
 
     const adDetected = isAdVisible();
-
     if (adDetected && !isMuted) {
-      muteAllVideos();
-      startForceMute();
+      chrome.runtime.sendMessage({ mute: true });
       isMuted = true;
-      console.log('✅ 광고 감지 - 음소거 시작');
+      console.log('📢 광고 감지 - 탭 음소거 요청');
     } else if (!adDetected && isMuted) {
-      unmuteAllVideos();
-      stopForceMute();
+      chrome.runtime.sendMessage({ mute: false });
       isMuted = false;
-      console.log('✅ 광고 종료 - 음소거 해제');
+      console.log('🎵 광고 종료 - 탭 음소거 해제 요청');
     }
   });
 }
 
-setInterval(handleAdMute, 1000);
-
-// video 동적 추가될 때 mute 적용
-const observer = new MutationObserver(() => {
-  if (isMuted) muteAllVideos();
-});
-observer.observe(document.body, { childList: true, subtree: true });
+setInterval(handleAdCheck, 1000);

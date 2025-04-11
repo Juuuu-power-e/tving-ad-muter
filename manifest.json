@@ -1,9 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Tving Ad Muter",
-  "version": "1.1",
-  "description": "티빙 광고 감지시 자동 음소거, 종료 시 복원",
-  "permissions": ["storage", "scripting"],
+  "name": "Tving Ad Tab Muter",
+  "version": "2.0",
+  "permissions": ["tabs", "storage"],
   "host_permissions": ["*://*.tving.com/*"],
   "background": {
     "service_worker": "background.js"
