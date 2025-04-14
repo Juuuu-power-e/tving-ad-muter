@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Tving Ad Tab Muter",
   "version": "2.0",
-  "permissions": ["tabs", "storage"],
+  "permissions": ["storage"],
   "host_permissions": ["*://*.tving.com/*"],
   "background": {
     "service_worker": "background.js"
